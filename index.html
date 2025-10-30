@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>API接口文档</title>
+    <meta charset="UTF-8">
+    <title>API文档</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui.css">
+    <style>
+        html { box-sizing: border-box; overflow-y: scroll; }
+        *, *:before, *:after { box-sizing: inherit; }
+        body { margin: 0; background: #fafafa; }
+        .swagger-ui .topbar { display: none; }
+    </style>
 </head>
 <body>
     <div id="swagger-ui"></div>
+    
     <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
     <script>
         window.onload = function() {
-            // 直接读取同目录下的openapi.json文件
             fetch('./openapi.json')
                 .then(response => response.json())
                 .then(spec => {
                     SwaggerUIBundle({
                         spec: spec,
                         dom_id: '#swagger-ui',
+                        deepLinking: true,
                         presets: [
                             SwaggerUIBundle.presets.apis,
                             SwaggerUIBundle.SwaggerUIStandalonePreset
-                        ],
-                        layout: "StandaloneLayout"
+                        ]
+                        // 移除了 layout: "StandaloneLayout"
                     });
                 })
                 .catch(error => {
-                    console.error('加载API文档失败:', error);
                     document.getElementById('swagger-ui').innerHTML = 
-                        '<h2>加载失败，请确保openapi.json文件存在</h2>';
+                        '<div style="padding: 20px; color: red;">' +
+                        '<h2>加载失败</h2><p>' + error.message + '</p>' +
+                        '</div>';
                 });
         };
     </script>
